@@ -7,6 +7,8 @@ let evaluate = false;
 
 const numberBtns = document.querySelectorAll('.btn.number');
 const operatorBtns = document.querySelectorAll('.btn.operator');
+const equalBtn = document.querySelector('.btn.equal');
+
 
 
 numberBtns.forEach(btn => btn.addEventListener('click', () => {
@@ -16,6 +18,10 @@ numberBtns.forEach(btn => btn.addEventListener('click', () => {
 operatorBtns.forEach(btn => btn.addEventListener('click', () => {
     appendOperator(btn.textContent)
 }));
+
+equalBtn.addEventListener('click', () => {
+    checkOperator();
+});
 
 function appendNum(num) {
     if (lstOperator.length == 1) {
@@ -37,16 +43,18 @@ function appendOperator(operator) {
 
 function checkOperator() {
     firstOperator = lstOperator.slice(0, 1);
-    if (firstOperator == "+") {
+    if (lstOperator.length == 0) {
+        return
+    } else if (lstOperator[0] == "+") {
         add()
-    } else if (firstOperator == '-') {
+    } else if (lstOperator[0] == '-') {
         subtract()
-    } else if (firstOperator == 'x') {
+    } else if (lstOperator[0] == 'x') {
         multiply()
-    } else if (firstOperator == '÷') {
+    } else if (lstOperator[0] == '÷') {
         divide()
     } else {
-        console.log('error: operator is wrong');
+        console.log('ERROR: operator couldn\'t be read');
         console.log(lstOperator);
     }
 }

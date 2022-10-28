@@ -42,7 +42,6 @@ function appendOperator(operator) {
 }
 
 function checkOperator() {
-    firstOperator = lstOperator.slice(0, 1);
     if (lstOperator.length == 0) {
         return
     } else if (lstOperator[0] == "+") {
@@ -85,4 +84,20 @@ function multiply() {
     lstOperator.pop('x');
     console.log(lstOperator);
     console.log(total);
+}
+
+//Add a functionality that checks if number already has an existing decimal
+function appendDecimal() {
+    if (lstOperator.length == 1) {
+        secondOperand += '.';
+    } else {
+        firstOperand += '.';
+    }
+}
+
+function clear() {
+    firstOperand = "";
+    secondOperand = "";
+    lstOperator.clear;
+    total = 0;
 }

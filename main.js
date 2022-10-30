@@ -1,14 +1,13 @@
 let lstOperator = [];
 let firstOperand = "";
 let secondOperand = "";
-let total = 0;
-let evaluate = false;
+let countEvaluate = 0;
 
 
 const numberBtns = document.querySelectorAll('.btn.number');
 const operatorBtns = document.querySelectorAll('.btn.operator');
 const equalBtn = document.querySelector('.btn.equal');
-
+const clearBtn = document.querySelector('.btn.clear');
 
 
 numberBtns.forEach(btn => btn.addEventListener('click', () => {
@@ -23,8 +22,14 @@ equalBtn.addEventListener('click', () => {
     checkOperator();
 });
 
+clearBtn.addEventListener('click', () => {
+    clear();
+});
+
 function appendNum(num) {
-    if (lstOperator.length == 1) {
+    if (lstOperator.length == 0 && countEvaluate > 0) {
+        return
+    } else if (lstOperator.length == 1 || countEvaluate > 0) {
         secondOperand += num;
         console.log(secondOperand);
     } else {
@@ -44,60 +49,69 @@ function appendOperator(operator) {
 function checkOperator() {
     if (lstOperator.length == 0) {
         return
-    } else if (lstOperator[0] == "+") {
-        add()
-    } else if (lstOperator[0] == '-') {
-        subtract()
-    } else if (lstOperator[0] == 'x') {
-        multiply()
-    } else if (lstOperator[0] == '÷') {
-        divide()
     } else {
-        console.log('ERROR: operator couldn\'t be read');
-        console.log(lstOperator);
-    }
+        firstOperand = parseInt(firstOperand);
+        if (lstOperator[0] == "+") {
+            add()
+        } else if (lstOperator[0] == '-') {
+            subtract()
+        } else if (lstOperator[0] == 'x') {
+            multiply()
+        } else if (lstOperator[0] == '÷') {
+            divide()
+        } else {
+            console.log('ERROR: operator couldn\'t be read');
+            console.log(lstOperator);
+        }
+    };
 }
 
 function add() {
-    total += (parseInt(firstOperand) + parseInt(secondOperand));
-    lstOperator.pop('+');
+    firstOperand += parseInt(secondOperand);
     console.log(lstOperator);
-    console.log(total);
+    console.log(firstOperand);
+    afterEvaulation()
 }
 
 function subtract() {
-    total += (parseInt(firstOperand) - parseInt(secondOperand));
-    lstOperator.pop('-');
+    firstOperand -= parseInt(secondOperand);
     console.log(lstOperator);
-    console.log(total); 
+    console.log(firstOperand);
+    afterEvaulation()
 }
 
 function divide() {
-    total += (parseInt(firstOperand) / parseInt(secondOperand));
-    lstOperator.pop('÷');
+    firstOperand /= parseInt(secondOperand);
     console.log(lstOperator);
-    console.log(total);
+    console.log(firstOperand);
+    afterEvaulation()
 }
 
 function multiply() {
-    total += (parseInt(firstOperand) * parseInt(secondOperand));
-    lstOperator.pop('x');
+    firstOperand *= parseInt(secondOperand);
     console.log(lstOperator);
-    console.log(total);
+    console.log(firstOperand);
+    afterEvaulation()
 }
 
-//Add a functionality that checks if number already has an existing decimal
-function appendDecimal() {
-    if (lstOperator.length == 1) {
-        secondOperand += '.';
-    } else {
-        firstOperand += '.';
-    }
+function afterEvaulation() {
+    lstOperator.splice(0,1);
+    secondOperand = "";
+    countEvaluate += 1;
 }
 
 function clear() {
     firstOperand = "";
     secondOperand = "";
     lstOperator.clear;
-    total = 0;
+    countEvaluate = 0;
+}
+
+//Add a functionality that checks if number already has an existing decimal (ADD LATER)
+function appendDecimal() {
+    if (lstOperator.length == 1) {
+        secondOperand += '.';
+    } else {
+        firstOperand += '.';
+    }
 }

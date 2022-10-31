@@ -8,6 +8,7 @@ const numberBtns = document.querySelectorAll('.btn.number');
 const operatorBtns = document.querySelectorAll('.btn.operator');
 const equalBtn = document.querySelector('.btn.equal');
 const clearBtn = document.querySelector('.btn.clear');
+const currentTxt = document.querySelector('.currentScreenTxt');
 
 
 numberBtns.forEach(btn => btn.addEventListener('click', () => {
@@ -15,7 +16,7 @@ numberBtns.forEach(btn => btn.addEventListener('click', () => {
 }));
 
 operatorBtns.forEach(btn => btn.addEventListener('click', () => {
-    appendOperator(btn.textContent)
+    appendOperator(btn)
 }));
 
 equalBtn.addEventListener('click', () => {
@@ -32,25 +33,35 @@ function appendNum(num) {
     } else if (lstOperator.length == 1 || countEvaluate > 0) {
         secondOperand += num;
         console.log(secondOperand);
+        currentTxt.textContent = `${secondOperand}`;
     } else {
         firstOperand += num;
         console.log(firstOperand);
+        currentTxt.textContent = `${firstOperand}`;
     }
 }
 
 function appendOperator(operator) {
-    lstOperator.push(operator);
+    if (firstOperand == '') {
+        return
+    }
+    lstOperator.push(operator.textContent);
     console.log(lstOperator);
+    operator.classList.add('active');
     if (lstOperator.length > 1) {
         checkOperator()
     }
 }
 
 function checkOperator() {
-    if (lstOperator.length == 0) {
-        return
+    if (lstOperator.length == 0 || secondOperand == '') {
+        if (lstOperator.length > 1) {
+            lstOperator.pop();
+        } else {
+            return
+        }
     } else {
-        firstOperand = parseInt(firstOperand);
+        firstOperand = parseFloat(firstOperand);
         if (lstOperator[0] == "+") {
             add()
         } else if (lstOperator[0] == '-') {
@@ -67,28 +78,35 @@ function checkOperator() {
 }
 
 function add() {
-    firstOperand += parseInt(secondOperand);
+    firstOperand += parseFloat(secondOperand);
     console.log(lstOperator);
     console.log(firstOperand);
     afterEvaulation()
 }
 
 function subtract() {
-    firstOperand -= parseInt(secondOperand);
+    firstOperand -= parseFloat(secondOperand);
     console.log(lstOperator);
     console.log(firstOperand);
     afterEvaulation()
 }
 
 function divide() {
-    firstOperand /= parseInt(secondOperand);
+    if (secondOperand == 0) {
+        firstOperand = 8008135;
+        console.log(lstOperator);
+        console.log(firstOperand);
+        afterEvaulation()
+        return
+    }
+    firstOperand /= parseFloat(secondOperand);
     console.log(lstOperator);
     console.log(firstOperand);
     afterEvaulation()
 }
 
 function multiply() {
-    firstOperand *= parseInt(secondOperand);
+    firstOperand *= parseFloat(secondOperand);
     console.log(lstOperator);
     console.log(firstOperand);
     afterEvaulation()
@@ -98,13 +116,16 @@ function afterEvaulation() {
     lstOperator.splice(0,1);
     secondOperand = "";
     countEvaluate += 1;
+    operatorBtns.forEach(btn => btn.classList.remove('active'));
+    currentTxt.textContent = `${Math.round((firstOperand + Number.EPSILON) * 100) / 100}`
 }
 
 function clear() {
     firstOperand = "";
     secondOperand = "";
-    lstOperator.clear;
+    lstOperator = [];
     countEvaluate = 0;
+    currentTxt.textContent = '';
 }
 
 //Add a functionality that checks if number already has an existing decimal (ADD LATER)
